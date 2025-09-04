@@ -43,7 +43,7 @@ export const PetCareBookingForm: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-transparent p-4 md:p-6">
+    <div className="min-h-screen bg-[#fce1ef] p-4 md:p-6">
       <div className="max-w-2xl mx-auto">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
