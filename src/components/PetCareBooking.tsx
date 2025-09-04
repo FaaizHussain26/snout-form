@@ -1,3 +1,5 @@
+"use client"
+
 import type React from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -35,7 +37,7 @@ export const PetCareBookingForm: React.FC = () => {
   const onSubmit = async (data: BookingFormData) => {
     try {
       await mutateAsync(data)
-      toast({ description: "Your booking was submitted successfully!" })
+      toast({ description: "Submitted successfully we will get in touch with you shortly" })
       form.reset()
     } catch (err) {
       toast({ description: err?.message || "Failed to submit booking" })
@@ -180,7 +182,11 @@ export const PetCareBookingForm: React.FC = () => {
               )}
             />
 
-            <Button type="submit" disabled={isPending} className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium">
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
+            >
               Submit
             </Button>
           </form>
