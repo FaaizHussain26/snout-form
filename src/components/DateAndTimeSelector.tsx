@@ -130,7 +130,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
         <p className="text-sm text-muted-foreground">Date and Time</p>
       </div>
 
-      <div className="relative">
+      <div className="relative  max-h-[500px]">
         <Card
           className="p-4 cursor-pointer bg-pet-input border-0 flex items-center justify-between"
           onClick={() => setIsOpen(!isOpen)}
@@ -146,7 +146,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
         </Card>
 
         {isOpen && (
-          <Card className="absolute top-full left-0 right-0 z-50 mt-1 bg-pet-card border-0 shadow-lg w-[800px]">
+          <Card className="absolute top-full left-[-170px] sm:left-0 md:left-[-170px] right-0 z-50 mt-1 bg-pet-card border-0 shadow-lg w-[500px]">
             <div className="flex ">
               <div className="flex-1 p-4 space-y-4 ">
                 <div className="space-y-2">
@@ -182,6 +182,9 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
                 {/* Calendar */}
                 <div className="flex justify-center">
                   <Calendar
+                   style={{
+                    width: '100%'
+                   }}
                     mode="single"
                     selected={selectedDate}
                     onSelect={setSelectedDate}
@@ -213,7 +216,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
               </div>
 
               {/* Right Column: Entries */}
-              <div className="w-80 border-l border-border bg-white p-4 space-y-4">
+              <div className="w-80 border-l border-border bg-white p-4 space-y-4 ">
                 <h4 className="font-semibold text-foreground text-lg">Entries</h4>
                 <div className="space-y-2 max-h-64 overflow-y-auto">
                   {entries.length === 0 ? (
