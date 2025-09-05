@@ -1,3 +1,4 @@
+import type React from "react"
 
 import { useEffect, useRef, useState } from "react"
 import { Card } from "@/components/ui/card"
@@ -17,23 +18,23 @@ export const PetSelector: React.FC<PetSelectorProps> = ({ selectedPets, onPetsCh
   const [customPet, setCustomPet] = useState("")
   const dropdownRef = useRef<HTMLDivElement | null>(null)
 
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-          setIsOpen(false)
-        }
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
       }
-  
-      if (isOpen) {
-        document.addEventListener("mousedown", handleClickOutside)
-      } else {
-        document.removeEventListener("mousedown", handleClickOutside)
-      }
-  
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside)
-      }
-    }, [isOpen])
+    }
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isOpen])
 
   const updatePetCount = (petType: string, change: number, otherName?: string) => {
     const existingPetIndex = selectedPets.findIndex(
@@ -65,6 +66,12 @@ export const PetSelector: React.FC<PetSelectorProps> = ({ selectedPets, onPetsCh
       updatePetCount("other_name", 1, customPet.trim())
       setCustomPet("")
     }
+  }
+
+  const getCustomPets = () => {
+    return selectedPets
+      .filter((pet) => pet.animal_type === "other_name" && pet.other_name)
+      .map((pet) => pet.other_name!)
   }
 
   const getPetCount = (petType: string, otherName?: string) => {
@@ -145,6 +152,33 @@ export const PetSelector: React.FC<PetSelectorProps> = ({ selectedPets, onPetsCh
                 </div>
               ))}
 
+              {getCustomPets().map((customPetName) => (
+                <div key={`custom-${customPetName}`} className="flex items-center justify-between">
+                  <span className="font-medium">{customPetName}</span>
+                  <div className="flex items-center space-x-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-8 p-0 border-pet-brown text-pet-brown hover:bg-pet-brown hover:text-white bg-transparent"
+                      onClick={() => updatePetCount("other_name", -1, customPetName)}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <span className="min-w-[2ch] text-center font-medium">
+                      {getPetCount("other_name", customPetName)}
+                    </span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-8 p-0 border-pet-brown text-pet-brown hover:bg-pet-brown hover:text-white bg-transparent"
+                      onClick={() => updatePetCount("other_name", 1, customPetName)}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+
               <div className="flex items-center space-x-2 pt-2 border-t">
                 <Input
                   placeholder="Enter Other Pet"
@@ -153,25 +187,15 @@ export const PetSelector: React.FC<PetSelectorProps> = ({ selectedPets, onPetsCh
                   className="flex-1 bg-pet-input border-0"
                   onKeyPress={(e) => e.key === "Enter" && addCustomPet()}
                 />
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 p-0 border-pet-brown text-pet-brown hover:bg-pet-brown hover:text-white bg-transparent"
-                    onClick={() => customPet && updatePetCount("other_name", -1, customPet)}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </Button>
-                  <span className="min-w-[2ch] text-center font-medium">{getPetCount("other_name", customPet)}</span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-8 w-8 p-0 border-pet-brown text-pet-brown hover:bg-pet-brown hover:text-white bg-transparent"
-                    onClick={addCustomPet}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-8 px-3 border-pet-brown text-pet-brown hover:bg-pet-brown hover:text-white bg-transparent"
+                  onClick={addCustomPet}
+                  disabled={!customPet.trim()}
+                >
+                  Add
+                </Button>
               </div>
             </div>
           </Card>

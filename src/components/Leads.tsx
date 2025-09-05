@@ -81,12 +81,12 @@ const Leads = () => {
                         {lead.address ?? "-"}
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 w-[10px]">
                       <div className="space-y-1">
                         {lead.pet_information?.map((pet, petIndex) => (
                           <div key={petIndex} className="inline-flex items-center gap-2 mr-2 mb-1">
                             <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-800">
-                              {pet.animal_type}
+                              {pet.animal_type === "other_name" ? pet.other_name.toLocaleUpperCase() : pet.animal_type.toLocaleUpperCase()}
                             </span>
                             <span className="text-xs text-gray-500">×{pet.quantity}</span>
                           </div>
