@@ -49,7 +49,6 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
     }
   }, [isOpen])
 
-
   const addEntry = () => {
     if (selectedDate && selectedTimeSlot) {
       const newEntry: TimeEntry = {
@@ -130,7 +129,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
         <p className="text-sm text-muted-foreground">Date and Time</p>
       </div>
 
-      <div className="relative  max-h-[500px]">
+      <div className="relative max-h-[500px]">
         <Card
           className="p-4 cursor-pointer bg-pet-input border-0 flex items-center justify-between"
           onClick={() => setIsOpen(!isOpen)}
@@ -146,9 +145,9 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
         </Card>
 
         {isOpen && (
-          <Card className="absolute top-full left-[-170px] sm:left-0 md:left-[-170px] right-0 z-50 mt-1 bg-pet-card border-0 shadow-lg w-[500px]">
-            <div className="flex ">
-              <div className="flex-1 p-4 space-y-4 ">
+          <Card className="absolute top-full left-[-170px] sm:left-0 md:left-[-270px] right-0 z-50 mt-1 bg-pet-card border-0 shadow-lg w-[600px] max-h-[600px] overflow-hidden">
+            <div className="flex max-h-[600px]">
+              <div className="flex-1 p-4 space-y-4 overflow-y-auto max-h-[600px]">
                 <div className="space-y-2">
                   <h4 className="font-medium text-foreground">Select Time</h4>
                   <div className="flex space-x-2">
@@ -182,9 +181,9 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
                 {/* Calendar */}
                 <div className="flex justify-center">
                   <Calendar
-                   style={{
-                    width: '100%'
-                   }}
+                    style={{
+                      width: "100%",
+                    }}
                     mode="single"
                     selected={selectedDate}
                     onSelect={setSelectedDate}
@@ -195,7 +194,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
                 {/* Time Slot Selection */}
                 <div className="space-y-3">
                   <h4 className="font-medium text-foreground">Select Time slot</h4>
-                  <div className="space-y-1 max-h-48 overflow-y-auto">
+                  <div className="space-y-1 max-h-60 overflow-y-auto">
                     {timeSlots.map((time) => (
                       <Button
                         key={time}
@@ -216,9 +215,9 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
               </div>
 
               {/* Right Column: Entries */}
-              <div className="w-80 border-l border-border bg-white p-4 space-y-4 ">
+              <div className="w-80 border-l border-border bg-white p-4 space-y-4 max-h-[600px] overflow-y-auto">
                 <h4 className="font-semibold text-foreground text-lg">Entries</h4>
-                <div className="space-y-2 max-h-64 overflow-y-auto">
+                <div className="space-y-2 max-h-80 overflow-y-auto">
                   {entries.length === 0 ? (
                     <div className="text-center text-muted-foreground text-sm py-8">No entries yet</div>
                   ) : (

@@ -1,5 +1,6 @@
-import type React from "react"
+"use client"
 
+import type React from "react"
 import { useEffect, useRef, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { ChevronDown, ChevronUp, Minus, Plus } from "lucide-react"
@@ -125,8 +126,8 @@ export const PetSelector: React.FC<PetSelectorProps> = ({ selectedPets, onPetsCh
         </Card>
 
         {isOpen && (
-          <Card className="absolute top-full left-0 right-0 z-50 mt-1 bg-pet-card border-0 shadow-lg max-h-100 overflow-auto ">
-            <div className="p-4 space-y-4 ">
+          <Card className="absolute top-full left-0 right-0 z-50 mt-1 bg-pet-card border-0 shadow-lg max-h-[365px] overflow-y-auto">
+            <div className="p-4 space-y-4">
               {defaultPets.map((pet) => (
                 <div key={pet} className="flex items-center justify-between">
                   <span className="font-medium">{getDisplayName(pet)}</span>
