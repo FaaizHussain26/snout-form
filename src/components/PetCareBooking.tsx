@@ -71,7 +71,7 @@ export const PetCareBookingForm: React.FC = () => {
                     <FormControl>
                       <PetSelector selectedPets={field.value} onPetsChange={field.onChange} />
                     </FormControl>
-                    {/* <FormMessage /> */}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -84,7 +84,7 @@ export const PetCareBookingForm: React.FC = () => {
                     <FormControl>
                       <DateTimeSelector onEntriesChange={field.onChange} />
                     </FormControl>
-                    {/* <FormMessage /> */}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
