@@ -109,8 +109,6 @@ All colors MUST be HSL.
 
   body {
     background-color: #fce1ef;
+    overflow-y: hidden;
   }  
-  body::-webkit-scrollbar {
-    display: none;             /* Chrome, Safari, Opera */
-  }
 }
