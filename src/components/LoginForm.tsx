@@ -26,6 +26,9 @@ export function LoginForm({ onLogin, error }: LoginFormProps) {
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <Card className="w-full max-w-md">
         <CardHeader>
+          <div className="flex justify-center mb-4">
+            <img src="./assets/logo.png" alt="Snout Logo" className="h-12 w-12" />
+          </div>
           <CardTitle>Admin Login</CardTitle>
           <CardDescription>Enter your credentials to access the leads dashboard</CardDescription>
         </CardHeader>
