@@ -51,12 +51,18 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
   onAddressesChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const [startingPoint, setStartingPoint] = useState("");
   const [endingPoint, setEndingPoint] = useState("");
   const [entries, setEntries] = useState<PetTaxiEntry[]>([]);
   const [isMobile, setIsMobile] = useState(false);
+  const [dateRange, setDateRange] = useState<{
+    from: Date | undefined;
+    to: Date | undefined;
+  }>({
+    from: undefined,
+    to: undefined,
+  });
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -95,10 +101,10 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
   }, []);
 
   const addEntry = () => {
-    if (selectedDate && selectedTimeSlot && startingPoint && endingPoint) {
+    if (dateRange.from && selectedTimeSlot && startingPoint && endingPoint) {
       const newEntry: PetTaxiEntry = {
         id: Date.now().toString(),
-        date: selectedDate,
+        date: dateRange.from,
         time: selectedTimeSlot,
         startingPoint,
         endingPoint,
@@ -116,7 +122,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
           ? 0
           : hours;
 
-      const dateTime = new Date(selectedDate);
+      const dateTime = new Date(dateRange.from);
       dateTime.setHours(adjustedHours, minutes);
 
       const formattedEntries = updatedEntries.map((entry) => {
@@ -259,14 +265,24 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
 
                 {/* Calendar */}
                 <div className="space-y-2">
-                  <h4 className="font-medium text-foreground">Select Date</h4>
+                  <h4 className="font-medium text-foreground">
+                    Select Date Range
+                  </h4>
                   <div className="flex justify-center">
                     <Calendar
                       style={{ width: "100%" }}
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={setSelectedDate}
+                      mode="range"
+                      selected={dateRange}
+                      onSelect={(range) => {
+                        if (range?.from) {
+                          setDateRange({
+                            from: range.from,
+                            to: range.to,
+                          });
+                        }
+                      }}
                       className="rounded-md border-0 bg-transparent"
+                      disabled={(date) => date < new Date()}
                     />
                   </div>
                 </div>
@@ -340,7 +356,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                       className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
                       onClick={addEntry}
                       disabled={
-                        !selectedDate ||
+                        !dateRange.from ||
                         !selectedTimeSlot ||
                         !startingPoint ||
                         !endingPoint
@@ -399,7 +415,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                     className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
                     onClick={addEntry}
                     disabled={
-                      !selectedDate ||
+                      !dateRange.from ||
                       !selectedTimeSlot ||
                       !startingPoint ||
                       !endingPoint

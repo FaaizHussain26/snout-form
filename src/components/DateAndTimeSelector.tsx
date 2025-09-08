@@ -40,6 +40,13 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   const [duration, setDuration] = useState("30min");
   const [entries, setEntries] = useState<TimeEntry[]>([]);
   const [isMobile, setIsMobile] = useState(false);
+  const [dateRange, setDateRange] = useState<{
+    from: Date | undefined;
+    to: Date | undefined;
+  }>({
+    from: undefined,
+    to: undefined,
+  });
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -78,10 +85,10 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   }, []);
 
   const addEntry = () => {
-    if (selectedDate && selectedTimeSlot) {
+    if (dateRange.from && selectedTimeSlot) {
       const newEntry: TimeEntry = {
         id: Date.now().toString(),
-        date: selectedDate,
+        date: dateRange.from,
         time: selectedTimeSlot,
         type: duration,
       };
@@ -246,10 +253,19 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                     style={{
                       width: "100%",
                     }}
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={setSelectedDate}
+                    mode="range"
+                    selected={dateRange}
+                    onSelect={(range) => {
+                      if (range?.from) {
+                        setDateRange({
+                          from: range.from,
+                          to: range.to,
+                        });
+                        setSelectedDate(range.from);
+                      }
+                    }}
                     className="rounded-md border-0 bg-transparent"
+                    disabled={(date) => date < new Date()}
                   />
                 </div>
 
@@ -320,7 +336,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                       type="button"
                       className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
                       onClick={addEntry}
-                      disabled={!selectedDate || !selectedTimeSlot}
+                      disabled={!dateRange.from || !selectedTimeSlot}
                     >
                       Add Entry
                     </Button>
@@ -371,7 +387,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                     type="button"
                     className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
                     onClick={addEntry}
-                    disabled={!selectedDate || !selectedTimeSlot}
+                    disabled={!dateRange.from || !selectedTimeSlot}
                   >
                     Add Entry
                   </Button>

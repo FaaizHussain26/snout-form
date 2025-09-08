@@ -212,27 +212,22 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({
                 }}
               >
                 <div className="space-y-2">
-                  <h4 className="font-medium text-foreground">First Day</h4>
+                  <h4 className="font-medium text-foreground">
+                    Select Date Range
+                  </h4>
                   <div className="flex justify-center">
                     <Calendar
                       style={{ width: "100%" }}
-                      mode="single"
-                      selected={firstDay}
-                      onSelect={setFirstDay}
+                      mode="range"
+                      selected={{ from: firstDay, to: lastDay }}
+                      onSelect={(range) => {
+                        if (range?.from) {
+                          setFirstDay(range.from);
+                          setLastDay(range.to || range.from);
+                        }
+                      }}
                       className="rounded-md border-0 bg-transparent"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <h4 className="font-medium text-foreground">Last Day</h4>
-                  <div className="flex justify-center">
-                    <Calendar
-                      style={{ width: "100%" }}
-                      mode="single"
-                      selected={lastDay}
-                      onSelect={setLastDay}
-                      className="rounded-md border-0 bg-transparent"
+                      disabled={(date) => date < new Date()}
                     />
                   </div>
                 </div>
