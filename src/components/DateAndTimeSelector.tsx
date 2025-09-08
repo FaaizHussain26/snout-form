@@ -265,7 +265,6 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                       }
                     }}
                     className="rounded-md border-0 bg-transparent"
-                    disabled={(date) => date < new Date()}
                   />
                 </div>
 
@@ -274,7 +273,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                   <h4 className="font-medium text-foreground">
                     Select Time slot
                   </h4>
-                  <div className="space-y-1 max-h-60 overflow-y-auto">
+                  <div className="space-y-1 max-h-40 overflow-y-auto">
                     {timeSlots.map((time) => (
                       <Button
                         key={time}

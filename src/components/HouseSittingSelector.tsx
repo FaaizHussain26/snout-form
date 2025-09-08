@@ -227,7 +227,6 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({
                         }
                       }}
                       className="rounded-md border-0 bg-transparent"
-                      disabled={(date) => date < new Date()}
                     />
                   </div>
                 </div>
