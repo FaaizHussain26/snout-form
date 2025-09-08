@@ -180,15 +180,15 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
              left-0 right-0 z-50 mt-1 
              bg-pet-card border-0 
              shadow-lg 
-             max-h-[64vh] 
+             max-h-[54vh] 
              overflow-hidden
              sm:left-[-9px]
              sm:w-[568px] 
-             sm:max-h-[320px] 
+             sm:max-h-[400px] 
              sm:right-auto
              md:left-[-345px] 
              md:w-[680px] 
-             md:max-h-[320px]"
+             md:max-h-[400px]"
           >
             <div className="flex flex-col sm:flex-row max-h-[36vh] sm:max-h-[450px]">
               <div
