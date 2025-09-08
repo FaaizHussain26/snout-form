@@ -9,36 +9,47 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 
-interface DateTimeSelectorProps {
+interface HouseSittingSelectorProps {
   onEntriesChange: (entries: Array<{ type: string; datetime: string }>) => void;
 }
 
-interface TimeEntry {
+interface HouseSittingEntry {
   id: string;
-  date: Date;
-  time: string;
-  type: string;
+  firstDay: Date;
+  lastDay: Date;
+  startTime: string;
+  endTime: string;
 }
 
 const timeSlots = [
-  "9:30 AM",
-  "10:30 AM",
-  "11:30 AM",
-  "12:30 PM",
-  "1:30 PM",
-  "2:30 PM",
-  "3:30 PM",
-  "4:30 PM",
+  "6:00 AM",
+  "7:00 AM",
+  "8:00 AM",
+  "9:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "1:00 PM",
+  "2:00 PM",
+  "3:00 PM",
+  "4:00 PM",
+  "5:00 PM",
+  "6:00 PM",
+  "7:00 PM",
+  "8:00 PM",
+  "9:00 PM",
+  "10:00 PM",
 ];
 
-export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
+export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({
   onEntriesChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-  const [duration, setDuration] = useState("30min");
-  const [entries, setEntries] = useState<TimeEntry[]>([]);
+  const [firstDay, setFirstDay] = useState<Date | undefined>(undefined);
+  const [lastDay, setLastDay] = useState<Date | undefined>(undefined);
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [entries, setEntries] = useState<HouseSittingEntry[]>([]);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -64,81 +75,76 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   }, [isOpen]);
 
   const addEntry = () => {
-    if (selectedDate && selectedTimeSlot) {
-      const newEntry: TimeEntry = {
+    if (firstDay && lastDay && startTime && endTime) {
+      const newEntry: HouseSittingEntry = {
         id: Date.now().toString(),
-        date: selectedDate,
-        time: selectedTimeSlot,
-        type: duration,
+        firstDay,
+        lastDay,
+        startTime,
+        endTime,
       };
       const updatedEntries = [...entries, newEntry];
       setEntries(updatedEntries);
 
-      // Create combined date-time for the main form
-      const [time, period] = selectedTimeSlot.split(" ");
-      const [hours, minutes] = time.split(":").map(Number);
-      const adjustedHours =
-        period === "PM" && hours !== 12
-          ? hours + 12
-          : period === "AM" && hours === 12
-          ? 0
-          : hours;
-
-      const dateTime = new Date(selectedDate);
-      dateTime.setHours(adjustedHours, minutes);
-
-      const formattedEntries = updatedEntries.map((entry) => {
-        const [entryTime, entryPeriod] = entry.time.split(" ");
-        const [entryHours, entryMinutes] = entryTime.split(":").map(Number);
-        const entryAdjustedHours =
-          entryPeriod === "PM" && entryHours !== 12
-            ? entryHours + 12
-            : entryPeriod === "AM" && entryHours === 12
-            ? 0
-            : entryHours;
-
-        const entryDateTime = new Date(entry.date);
-        entryDateTime.setHours(entryAdjustedHours, entryMinutes);
-
-        return {
-          type: entry.type,
-          datetime: entryDateTime.toISOString(),
+      const formattedEntries = updatedEntries.flatMap((entry) => {
+        const firstDayEntry = {
+          type: "house_sitting_start",
+          datetime: combineDateTime(
+            entry.firstDay,
+            entry.startTime
+          ).toISOString(),
         };
+        const lastDayEntry = {
+          type: "house_sitting_end",
+          datetime: combineDateTime(entry.lastDay, entry.endTime).toISOString(),
+        };
+        return [firstDayEntry, lastDayEntry];
       });
 
       onEntriesChange(formattedEntries);
     }
   };
 
+  const combineDateTime = (date: Date, time: string) => {
+    const [timeStr, period] = time.split(" ");
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    const adjustedHours =
+      period === "PM" && hours !== 12
+        ? hours + 12
+        : period === "AM" && hours === 12
+        ? 0
+        : hours;
+
+    const dateTime = new Date(date);
+    dateTime.setHours(adjustedHours, minutes);
+    return dateTime;
+  };
+
   const removeEntry = (id: string) => {
     const updatedEntries = entries.filter((entry) => entry.id !== id);
     setEntries(updatedEntries);
 
-    const formattedEntries = updatedEntries.map((entry) => {
-      const [entryTime, entryPeriod] = entry.time.split(" ");
-      const [entryHours, entryMinutes] = entryTime.split(":").map(Number);
-      const entryAdjustedHours =
-        entryPeriod === "PM" && entryHours !== 12
-          ? entryHours + 12
-          : entryPeriod === "AM" && entryHours === 12
-          ? 0
-          : entryHours;
-
-      const entryDateTime = new Date(entry.date);
-      entryDateTime.setHours(entryAdjustedHours, entryMinutes);
-
-      return {
-        type: entry.type,
-        datetime: entryDateTime.toISOString(),
+    const formattedEntries = updatedEntries.flatMap((entry) => {
+      const firstDayEntry = {
+        type: "house_sitting_start",
+        datetime: combineDateTime(
+          entry.firstDay,
+          entry.startTime
+        ).toISOString(),
       };
+      const lastDayEntry = {
+        type: "house_sitting_end",
+        datetime: combineDateTime(entry.lastDay, entry.endTime).toISOString(),
+      };
+      return [firstDayEntry, lastDayEntry];
     });
 
     onEntriesChange(formattedEntries);
   };
 
   const getDisplayText = () => {
-    if (entries.length === 0) return "Choose date and time";
-    return `${entries.length} appointment${
+    if (entries.length === 0) return "Choose house sitting dates and times";
+    return `${entries.length} house sitting period${
       entries.length > 1 ? "s" : ""
     } scheduled`;
   };
@@ -146,8 +152,10 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   return (
     <div className="space-y-2" ref={dropdownRef}>
       <div>
-        <h3 className="font-medium text-foreground">For What Date and Time?</h3>
-        <p className="text-sm text-muted-foreground">Date and Time</p>
+        <h3 className="font-medium text-foreground">House Sitting Period</h3>
+        <p className="text-sm text-muted-foreground">
+          Select first day, last day, and times
+        </p>
       </div>
 
       <div className="relative max-h-[500px]">
@@ -189,73 +197,71 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                   overflowY: "auto",
                 }}
               >
-                <div
-                  className="space-y-2 "
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <h4 className="font-medium text-foreground">Select Time</h4>
-                  <div className="flex space-x-2">
-                    <Button
-                      variant={duration === "30min" ? "default" : "outline"}
-                      size="sm"
-                      className={cn(
-                        duration === "30min"
-                          ? "bg-pet-brown hover:bg-pet-light-brown text-white"
-                          : "border-pet-brown text-pet-brown hover:bg-pet-brown hover:text-white"
-                      )}
-                      onClick={() => setDuration("30min")}
-                    >
-                      30min
-                    </Button>
-                    <Button
-                      variant={duration === "60min" ? "default" : "outline"}
-                      size="sm"
-                      className={cn(
-                        duration === "60min"
-                          ? "bg-pet-brown hover:bg-pet-light-brown text-white"
-                          : "border-pet-brown text-pet-brown hover:bg-pet-brown hover:text-white"
-                      )}
-                      onClick={() => setDuration("60min")}
-                    >
-                      60min
-                    </Button>
+                <div className="space-y-2">
+                  <h4 className="font-medium text-foreground">First Day</h4>
+                  <div className="flex justify-center">
+                    <Calendar
+                      style={{ width: "100%" }}
+                      mode="single"
+                      selected={firstDay}
+                      onSelect={setFirstDay}
+                      className="rounded-md border-0 bg-transparent"
+                    />
                   </div>
                 </div>
 
-                {/* Calendar */}
-                <div className="flex justify-center">
-                  <Calendar
-                    style={{
-                      width: "100%",
-                    }}
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={setSelectedDate}
-                    className="rounded-md border-0 bg-transparent"
-                  />
+                <div className="space-y-2">
+                  <h4 className="font-medium text-foreground">Last Day</h4>
+                  <div className="flex justify-center">
+                    <Calendar
+                      style={{ width: "100%" }}
+                      mode="single"
+                      selected={lastDay}
+                      onSelect={setLastDay}
+                      className="rounded-md border-0 bg-transparent"
+                    />
+                  </div>
                 </div>
 
-                {/* Time Slot Selection */}
-                <div className="space-y-3 display-flex">
+                <div className="space-y-3">
                   <h4 className="font-medium text-foreground">
-                    Select Time slot
+                    Start Time (First Day)
                   </h4>
-                  <div className="space-y-1 max-h-60 overflow-y-auto">
+                  <div className="space-y-1 max-h-40 overflow-y-auto">
                     {timeSlots.map((time) => (
                       <Button
                         key={time}
                         variant="ghost"
                         className={cn(
-                          "w-full justify-start text-left h-12 transition-all duration-200 font-medium border",
-                          selectedTimeSlot === time
+                          "w-full justify-start text-left h-10 transition-all duration-200 font-medium border",
+                          startTime === time
                             ? "bg-pet-brown hover:bg-pet-light-brown text-white border-pet-brown"
                             : "bg-pet-card hover:bg-pet-brown hover:text-white border-pet-card hover:border-pet-brown"
                         )}
-                        onClick={() => setSelectedTimeSlot(time)}
+                        onClick={() => setStartTime(time)}
+                      >
+                        {time}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="font-medium text-foreground">
+                    End Time (Last Day)
+                  </h4>
+                  <div className="space-y-1 max-h-40 overflow-y-auto">
+                    {timeSlots.map((time) => (
+                      <Button
+                        key={time}
+                        variant="ghost"
+                        className={cn(
+                          "w-full justify-start text-left h-10 transition-all duration-200 font-medium border",
+                          endTime === time
+                            ? "bg-pet-brown hover:bg-pet-light-brown text-white border-pet-brown"
+                            : "bg-pet-card hover:bg-pet-brown hover:text-white border-pet-card hover:border-pet-brown"
+                        )}
+                        onClick={() => setEndTime(time)}
                       >
                         {time}
                       </Button>
@@ -264,15 +270,14 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                 </div>
               </div>
 
-              {/* Right Column: Entries */}
               <div className="w-full sm:w-80 border-t sm:border-t-0 sm:border-l border-border bg-white p-4 space-y-4 max-h-[20vh] sm:max-h-[600px] overflow-y-auto">
                 <h4 className="font-semibold text-foreground text-lg">
-                  Entries
+                  House Sitting Periods
                 </h4>
                 <div className="space-y-2 max-h-80 overflow-y-auto">
                   {entries.length === 0 ? (
                     <div className="text-center text-muted-foreground text-sm py-8">
-                      No entries yet
+                      No periods scheduled yet
                     </div>
                   ) : (
                     entries.map((entry) => (
@@ -281,11 +286,12 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                         className="flex items-center justify-between py-4 px-1 border-b border-border last:border-b-0"
                       >
                         <div className="space-y-1">
-                          <div className="font-semibold text-foreground text-base">
-                            {format(entry.date, "MMMM dd, yyyy")}
+                          <div className="font-semibold text-foreground text-sm">
+                            {format(entry.firstDay, "MMM dd")} -{" "}
+                            {format(entry.lastDay, "MMM dd, yyyy")}
                           </div>
-                          <div className="text-muted-foreground font-medium text-sm">
-                            {entry.time} ({entry.type})
+                          <div className="text-muted-foreground font-medium text-xs">
+                            {entry.startTime} - {entry.endTime}
                           </div>
                         </div>
                         <Button
@@ -306,9 +312,9 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                   type="button"
                   className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
                   onClick={addEntry}
-                  disabled={!selectedDate || !selectedTimeSlot}
+                  disabled={!firstDay || !lastDay || !startTime || !endTime}
                 >
-                  Add Entry
+                  Add House Sitting Period
                 </Button>
               </div>
             </div>

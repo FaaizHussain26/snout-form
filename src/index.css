@@ -35,12 +35,12 @@ All colors MUST be HSL.
 
     --border: 318 44% 88%;
     --input: 318 44% 88%;
-    --ring: 25 47% 25%;
+    --ring: 25 35% 20%;
 
     /* Pet Care Specific Colors */
     --pet-pink: 318 44% 92%;
-    --pet-brown: 25 47% 25%;
-    --pet-light-brown: 25 47% 35%;
+    --pet-brown: 25 35% 20%;
+    --pet-light-brown: 25 35% 30%;
     --pet-card: 0 0% 100%;
     --pet-input: 318 20% 96%;
 

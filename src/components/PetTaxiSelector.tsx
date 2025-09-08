@@ -8,37 +8,54 @@ import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
 
-interface DateTimeSelectorProps {
+interface PetTaxiSelectorProps {
   onEntriesChange: (entries: Array<{ type: string; datetime: string }>) => void;
+  onAddressesChange: (addresses: {
+    starting_point: string;
+    ending_point: string;
+  }) => void;
 }
 
-interface TimeEntry {
+interface PetTaxiEntry {
   id: string;
   date: Date;
   time: string;
-  type: string;
+  startingPoint: string;
+  endingPoint: string;
 }
 
 const timeSlots = [
-  "9:30 AM",
-  "10:30 AM",
-  "11:30 AM",
-  "12:30 PM",
-  "1:30 PM",
-  "2:30 PM",
-  "3:30 PM",
-  "4:30 PM",
+  "6:00 AM",
+  "7:00 AM",
+  "8:00 AM",
+  "9:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "1:00 PM",
+  "2:00 PM",
+  "3:00 PM",
+  "4:00 PM",
+  "5:00 PM",
+  "6:00 PM",
+  "7:00 PM",
+  "8:00 PM",
+  "9:00 PM",
+  "10:00 PM",
 ];
 
-export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
+export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
   onEntriesChange,
+  onAddressesChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-  const [duration, setDuration] = useState("30min");
-  const [entries, setEntries] = useState<TimeEntry[]>([]);
+  const [startingPoint, setStartingPoint] = useState("");
+  const [endingPoint, setEndingPoint] = useState("");
+  const [entries, setEntries] = useState<PetTaxiEntry[]>([]);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -64,12 +81,13 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   }, [isOpen]);
 
   const addEntry = () => {
-    if (selectedDate && selectedTimeSlot) {
-      const newEntry: TimeEntry = {
+    if (selectedDate && selectedTimeSlot && startingPoint && endingPoint) {
+      const newEntry: PetTaxiEntry = {
         id: Date.now().toString(),
         date: selectedDate,
         time: selectedTimeSlot,
-        type: duration,
+        startingPoint,
+        endingPoint,
       };
       const updatedEntries = [...entries, newEntry];
       setEntries(updatedEntries);
@@ -101,12 +119,16 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
         entryDateTime.setHours(entryAdjustedHours, entryMinutes);
 
         return {
-          type: entry.type,
+          type: "pet_taxi",
           datetime: entryDateTime.toISOString(),
         };
       });
 
       onEntriesChange(formattedEntries);
+      onAddressesChange({
+        starting_point: startingPoint,
+        ending_point: endingPoint,
+      });
     }
   };
 
@@ -128,17 +150,28 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
       entryDateTime.setHours(entryAdjustedHours, entryMinutes);
 
       return {
-        type: entry.type,
+        type: "pet_taxi",
         datetime: entryDateTime.toISOString(),
       };
     });
 
     onEntriesChange(formattedEntries);
+
+    // Update addresses if there are still entries
+    if (updatedEntries.length > 0) {
+      const latestEntry = updatedEntries[updatedEntries.length - 1];
+      onAddressesChange({
+        starting_point: latestEntry.startingPoint,
+        ending_point: latestEntry.endingPoint,
+      });
+    } else {
+      onAddressesChange({ starting_point: "", ending_point: "" });
+    }
   };
 
   const getDisplayText = () => {
-    if (entries.length === 0) return "Choose date and time";
-    return `${entries.length} appointment${
+    if (entries.length === 0) return "Choose pet taxi dates and times";
+    return `${entries.length} pet taxi trip${
       entries.length > 1 ? "s" : ""
     } scheduled`;
   };
@@ -146,8 +179,10 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   return (
     <div className="space-y-2" ref={dropdownRef}>
       <div>
-        <h3 className="font-medium text-foreground">For What Date and Time?</h3>
-        <p className="text-sm text-muted-foreground">Date and Time</p>
+        <h3 className="font-medium text-foreground">Pet Taxi Service</h3>
+        <p className="text-sm text-muted-foreground">
+          Select date, time, and addresses
+        </p>
       </div>
 
       <div className="relative max-h-[500px]">
@@ -168,18 +203,18 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
         {isOpen && (
           <Card
             className="absolute top-full 
-             left-0 right-0 z-50 mt-1 
-             bg-pet-card border-0 
-             shadow-lg 
-             max-h-[80vh] 
-             overflow-hidden
-             sm:left-[-9px]
-             sm:w-[568px] 
-             sm:max-h-[450px] 
-             sm:right-auto
-             md:left-[-345px] 
-             md:w-[680px] 
-             md:max-h-[450px]"
+            left-0 right-0 z-50 mt-1 
+            bg-pet-card border-0 
+            shadow-lg 
+            max-h-[80vh] 
+            overflow-hidden
+            sm:left-[-9px]
+            sm:w-[568px] 
+            sm:max-h-[450px] 
+            sm:right-auto
+            md:left-[-345px] 
+            md:w-[680px] 
+            md:max-h-[450px]"
           >
             <div className="flex flex-col sm:flex-row max-h-[45vh] sm:max-h-[450px]">
               <div
@@ -189,68 +224,49 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                   overflowY: "auto",
                 }}
               >
-                <div
-                  className="space-y-2 "
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <h4 className="font-medium text-foreground">Select Time</h4>
-                  <div className="flex space-x-2">
-                    <Button
-                      variant={duration === "30min" ? "default" : "outline"}
-                      size="sm"
-                      className={cn(
-                        duration === "30min"
-                          ? "bg-pet-brown hover:bg-pet-light-brown text-white"
-                          : "border-pet-brown text-pet-brown hover:bg-pet-brown hover:text-white"
-                      )}
-                      onClick={() => setDuration("30min")}
-                    >
-                      30min
-                    </Button>
-                    <Button
-                      variant={duration === "60min" ? "default" : "outline"}
-                      size="sm"
-                      className={cn(
-                        duration === "60min"
-                          ? "bg-pet-brown hover:bg-pet-light-brown text-white"
-                          : "border-pet-brown text-pet-brown hover:bg-pet-brown hover:text-white"
-                      )}
-                      onClick={() => setDuration("60min")}
-                    >
-                      60min
-                    </Button>
+                {/* Address Fields */}
+                <div className="space-y-3">
+                  <h4 className="font-medium text-foreground">Addresses</h4>
+                  <div className="space-y-2">
+                    <Input
+                      placeholder="Starting address"
+                      value={startingPoint}
+                      onChange={(e) => setStartingPoint(e.target.value)}
+                      className="bg-pet-input border-0 h-10"
+                    />
+                    <Input
+                      placeholder="Ending address"
+                      value={endingPoint}
+                      onChange={(e) => setEndingPoint(e.target.value)}
+                      className="bg-pet-input border-0 h-10"
+                    />
                   </div>
                 </div>
 
                 {/* Calendar */}
-                <div className="flex justify-center">
-                  <Calendar
-                    style={{
-                      width: "100%",
-                    }}
-                    mode="single"
-                    selected={selectedDate}
-                    onSelect={setSelectedDate}
-                    className="rounded-md border-0 bg-transparent"
-                  />
+                <div className="space-y-2">
+                  <h4 className="font-medium text-foreground">Select Date</h4>
+                  <div className="flex justify-center">
+                    <Calendar
+                      style={{ width: "100%" }}
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={setSelectedDate}
+                      className="rounded-md border-0 bg-transparent"
+                    />
+                  </div>
                 </div>
 
                 {/* Time Slot Selection */}
-                <div className="space-y-3 display-flex">
-                  <h4 className="font-medium text-foreground">
-                    Select Time slot
-                  </h4>
+                <div className="space-y-3">
+                  <h4 className="font-medium text-foreground">Select Time</h4>
                   <div className="space-y-1 max-h-60 overflow-y-auto">
                     {timeSlots.map((time) => (
                       <Button
                         key={time}
                         variant="ghost"
                         className={cn(
-                          "w-full justify-start text-left h-12 transition-all duration-200 font-medium border",
+                          "w-full justify-start text-left h-10 transition-all duration-200 font-medium border",
                           selectedTimeSlot === time
                             ? "bg-pet-brown hover:bg-pet-light-brown text-white border-pet-brown"
                             : "bg-pet-card hover:bg-pet-brown hover:text-white border-pet-card hover:border-pet-brown"
@@ -267,12 +283,12 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
               {/* Right Column: Entries */}
               <div className="w-full sm:w-80 border-t sm:border-t-0 sm:border-l border-border bg-white p-4 space-y-4 max-h-[20vh] sm:max-h-[600px] overflow-y-auto">
                 <h4 className="font-semibold text-foreground text-lg">
-                  Entries
+                  Pet Taxi Trips
                 </h4>
                 <div className="space-y-2 max-h-80 overflow-y-auto">
                   {entries.length === 0 ? (
                     <div className="text-center text-muted-foreground text-sm py-8">
-                      No entries yet
+                      No trips scheduled yet
                     </div>
                   ) : (
                     entries.map((entry) => (
@@ -281,11 +297,14 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                         className="flex items-center justify-between py-4 px-1 border-b border-border last:border-b-0"
                       >
                         <div className="space-y-1">
-                          <div className="font-semibold text-foreground text-base">
-                            {format(entry.date, "MMMM dd, yyyy")}
+                          <div className="font-semibold text-foreground text-sm">
+                            {format(entry.date, "MMM dd, yyyy")}
                           </div>
-                          <div className="text-muted-foreground font-medium text-sm">
-                            {entry.time} ({entry.type})
+                          <div className="text-muted-foreground font-medium text-xs">
+                            {entry.time}
+                          </div>
+                          <div className="text-muted-foreground font-medium text-xs">
+                            {entry.startingPoint} → {entry.endingPoint}
                           </div>
                         </div>
                         <Button
@@ -306,9 +325,14 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                   type="button"
                   className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
                   onClick={addEntry}
-                  disabled={!selectedDate || !selectedTimeSlot}
+                  disabled={
+                    !selectedDate ||
+                    !selectedTimeSlot ||
+                    !startingPoint ||
+                    !endingPoint
+                  }
                 >
-                  Add Entry
+                  Add Pet Taxi Trip
                 </Button>
               </div>
             </div>
