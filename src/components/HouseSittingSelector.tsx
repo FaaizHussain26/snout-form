@@ -179,21 +179,21 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({
              left-0 right-0 z-50 mt-1 
              bg-pet-card border-0 
              shadow-lg 
-             max-h-[80vh] 
+             max-h-[400px] 
              overflow-hidden
              sm:left-[-9px]
              sm:w-[568px] 
-             sm:max-h-[450px] 
+             sm:max-h-[400px] 
              sm:right-auto
              md:left-[-345px] 
              md:w-[680px] 
-             md:max-h-[450px]"
+             md:max-h-[400px]"
           >
-            <div className="flex flex-col sm:flex-row max-h-[45vh] sm:max-h-[450px]">
+            <div className="flex flex-col sm:flex-row h-[400px]">
               <div
                 className="flex-1 p-4 space-y-4 overflow-y-auto"
                 style={{
-                  maxHeight: "45vh",
+                  maxHeight: "350px",
                   overflowY: "auto",
                 }}
               >
@@ -270,7 +270,7 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({
                 </div>
               </div>
 
-              <div className="w-full sm:w-80 border-t sm:border-t-0 sm:border-l border-border bg-white p-4 space-y-4 max-h-[20vh] sm:max-h-[600px] overflow-y-auto">
+              <div className="w-full sm:w-80 border-t sm:border-t-0 sm:border-l border-border bg-white p-4 space-y-4 h-[400px] overflow-y-auto">
                 <h4 className="font-semibold text-foreground text-lg">
                   House Sitting Periods
                 </h4>

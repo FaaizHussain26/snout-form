@@ -61,7 +61,7 @@ export const PetCareBookingForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fce1ef] p-2 md:p-6">
+    <div className="bg-[#fce1ef] p-2 md:p-6 overflow-hidden">
       <div className="max-w-2xl mx-auto">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
