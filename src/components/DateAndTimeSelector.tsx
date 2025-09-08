@@ -184,11 +184,11 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
              overflow-hidden
              sm:left-[-9px]
              sm:w-[568px] 
-             sm:max-h-[450px] 
+             sm:max-h-[320px] 
              sm:right-auto
              md:left-[-345px] 
              md:w-[680px] 
-             md:max-h-[450px]"
+             md:max-h-[320px]"
           >
             <div className="flex flex-col sm:flex-row max-h-[36vh] sm:max-h-[450px]">
               <div
