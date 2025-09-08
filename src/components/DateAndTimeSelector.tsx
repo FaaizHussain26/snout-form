@@ -39,6 +39,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const [duration, setDuration] = useState("30min");
   const [entries, setEntries] = useState<TimeEntry[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -62,6 +63,19 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640); // sm breakpoint
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
 
   const addEntry = () => {
     if (selectedDate && selectedTimeSlot) {
@@ -171,21 +185,21 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
              left-0 right-0 z-50 mt-1 
              bg-pet-card border-0 
              shadow-lg 
-             max-h-[400px] 
+             max-h-[80vh] 
              overflow-hidden
              sm:left-[-9px]
              sm:w-[568px] 
-             sm:max-h-[400px] 
+             sm:max-h-[450px] 
              sm:right-auto
              md:left-[-345px] 
              md:w-[680px] 
-             md:max-h-[400px]"
+             md:max-h-[450px]"
           >
-            <div className="flex flex-col sm:flex-row h-[400px]">
+            <div className="flex flex-col sm:flex-row max-h-[45vh] sm:max-h-[450px]">
               <div
                 className="flex-1 p-4 space-y-4 overflow-y-auto"
                 style={{
-                  maxHeight: "350px",
+                  maxHeight: "45vh",
                   overflowY: "auto",
                 }}
               >
@@ -262,55 +276,107 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                     ))}
                   </div>
                 </div>
-              </div>
 
-              {/* Right Column: Entries */}
-              <div className="w-full sm:w-80 border-t sm:border-t-0 sm:border-l border-border bg-white p-4 space-y-4 h-[400px] overflow-y-auto">
-                <h4 className="font-semibold text-foreground text-lg">
-                  Entries
-                </h4>
-                <div className="space-y-2 max-h-80 overflow-y-auto">
-                  {entries.length === 0 ? (
-                    <div className="text-center text-muted-foreground text-sm py-8">
-                      No entries yet
-                    </div>
-                  ) : (
-                    entries.map((entry) => (
-                      <div
-                        key={entry.id}
-                        className="flex items-center justify-between py-4 px-1 border-b border-border last:border-b-0"
-                      >
-                        <div className="space-y-1">
-                          <div className="font-semibold text-foreground text-base">
-                            {format(entry.date, "MMMM dd, yyyy")}
-                          </div>
-                          <div className="text-muted-foreground font-medium text-sm">
-                            {entry.time} ({entry.type})
-                          </div>
+                {/* Mobile Entries Section */}
+                {isMobile && (
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-foreground text-lg">
+                      Entries
+                    </h4>
+                    <div className="space-y-2">
+                      {entries.length === 0 ? (
+                        <div className="text-center text-muted-foreground text-sm py-8">
+                          No entries yet
                         </div>
-                        <Button
-                          variant="ghost"
-                          type="button"
-                          size="sm"
-                          className="h-8 w-8 p-0 hover:bg-muted rounded-full transition-colors flex-shrink-0"
-                          onClick={() => removeEntry(entry.id)}
-                        >
-                          <X className="h-4 w-4 text-muted-foreground" />
-                        </Button>
-                      </div>
-                    ))
-                  )}
-                </div>
+                      ) : (
+                        entries.map((entry) => (
+                          <div
+                            key={entry.id}
+                            className="flex items-center justify-between py-4 px-1 border-b border-border last:border-b-0"
+                          >
+                            <div className="space-y-1">
+                              <div className="font-semibold text-foreground text-base">
+                                {format(entry.date, "MMMM dd, yyyy")}
+                              </div>
+                              <div className="text-muted-foreground font-medium text-sm">
+                                {entry.time} ({entry.type})
+                              </div>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              type="button"
+                              size="sm"
+                              className="h-8 w-8 p-0 hover:bg-muted rounded-full transition-colors flex-shrink-0"
+                              onClick={() => removeEntry(entry.id)}
+                            >
+                              <X className="h-4 w-4 text-muted-foreground" />
+                            </Button>
+                          </div>
+                        ))
+                      )}
+                    </div>
 
-                <Button
-                  type="button"
-                  className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
-                  onClick={addEntry}
-                  disabled={!selectedDate || !selectedTimeSlot}
-                >
-                  Add Entry
-                </Button>
+                    <Button
+                      type="button"
+                      className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
+                      onClick={addEntry}
+                      disabled={!selectedDate || !selectedTimeSlot}
+                    >
+                      Add Entry
+                    </Button>
+                  </div>
+                )}
               </div>
+
+              {/* Right Column: Entries - Desktop Only */}
+              {!isMobile && (
+                <div className="w-80 border-l border-border bg-white p-4 space-y-4 h-[400px] overflow-y-auto">
+                  <h4 className="font-semibold text-foreground text-lg">
+                    Entries
+                  </h4>
+                  <div className="space-y-2 max-h-80 overflow-y-auto">
+                    {entries.length === 0 ? (
+                      <div className="text-center text-muted-foreground text-sm py-8">
+                        No entries yet
+                      </div>
+                    ) : (
+                      entries.map((entry) => (
+                        <div
+                          key={entry.id}
+                          className="flex items-center justify-between py-4 px-1 border-b border-border last:border-b-0"
+                        >
+                          <div className="space-y-1">
+                            <div className="font-semibold text-foreground text-base">
+                              {format(entry.date, "MMMM dd, yyyy")}
+                            </div>
+                            <div className="text-muted-foreground font-medium text-sm">
+                              {entry.time} ({entry.type})
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            type="button"
+                            size="sm"
+                            className="h-8 w-8 p-0 hover:bg-muted rounded-full transition-colors flex-shrink-0"
+                            onClick={() => removeEntry(entry.id)}
+                          >
+                            <X className="h-4 w-4 text-muted-foreground" />
+                          </Button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  <Button
+                    type="button"
+                    className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
+                    onClick={addEntry}
+                    disabled={!selectedDate || !selectedTimeSlot}
+                  >
+                    Add Entry
+                  </Button>
+                </div>
+              )}
             </div>
           </Card>
         )}

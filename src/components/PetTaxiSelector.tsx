@@ -56,6 +56,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
   const [startingPoint, setStartingPoint] = useState("");
   const [endingPoint, setEndingPoint] = useState("");
   const [entries, setEntries] = useState<PetTaxiEntry[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -79,6 +80,19 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640); // sm breakpoint
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
 
   const addEntry = () => {
     if (selectedDate && selectedTimeSlot && startingPoint && endingPoint) {
@@ -206,21 +220,21 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
             left-0 right-0 z-50 mt-1 
             bg-pet-card border-0 
             shadow-lg 
-            max-h-[400px] 
+            max-h-[80vh] 
             overflow-hidden
             sm:left-[-9px]
             sm:w-[568px] 
-            sm:max-h-[400px] 
+            sm:max-h-[450px] 
             sm:right-auto
             md:left-[-345px] 
             md:w-[680px] 
-            md:max-h-[400px]"
+            md:max-h-[450px]"
           >
-            <div className="flex flex-col sm:flex-row h-[400px]">
+            <div className="flex flex-col sm:flex-row max-h-[45vh] sm:max-h-[450px]">
               <div
                 className="flex-1 p-4 space-y-4 overflow-y-auto"
                 style={{
-                  maxHeight: "350px",
+                  maxHeight: "45vh",
                   overflowY: "auto",
                 }}
               >
@@ -278,63 +292,123 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                     ))}
                   </div>
                 </div>
-              </div>
 
-              {/* Right Column: Entries */}
-              <div className="w-full sm:w-80 border-t sm:border-t-0 sm:border-l border-border bg-white p-4 space-y-4 h-[400px] overflow-y-auto">
-                <h4 className="font-semibold text-foreground text-lg">
-                  Pet Taxi Trips
-                </h4>
-                <div className="space-y-2 max-h-80 overflow-y-auto">
-                  {entries.length === 0 ? (
-                    <div className="text-center text-muted-foreground text-sm py-8">
-                      No trips scheduled yet
-                    </div>
-                  ) : (
-                    entries.map((entry) => (
-                      <div
-                        key={entry.id}
-                        className="flex items-center justify-between py-4 px-1 border-b border-border last:border-b-0"
-                      >
-                        <div className="space-y-1">
-                          <div className="font-semibold text-foreground text-sm">
-                            {format(entry.date, "MMM dd, yyyy")}
-                          </div>
-                          <div className="text-muted-foreground font-medium text-xs">
-                            {entry.time}
-                          </div>
-                          <div className="text-muted-foreground font-medium text-xs">
-                            {entry.startingPoint} → {entry.endingPoint}
-                          </div>
+                {/* Mobile Entries Section */}
+                {isMobile && (
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-foreground text-lg">
+                      Pet Taxi Trips
+                    </h4>
+                    <div className="space-y-2">
+                      {entries.length === 0 ? (
+                        <div className="text-center text-muted-foreground text-sm py-8">
+                          No trips scheduled yet
                         </div>
-                        <Button
-                          variant="ghost"
-                          type="button"
-                          size="sm"
-                          className="h-8 w-8 p-0 hover:bg-muted rounded-full transition-colors flex-shrink-0"
-                          onClick={() => removeEntry(entry.id)}
-                        >
-                          <X className="h-4 w-4 text-muted-foreground" />
-                        </Button>
-                      </div>
-                    ))
-                  )}
-                </div>
+                      ) : (
+                        entries.map((entry) => (
+                          <div
+                            key={entry.id}
+                            className="flex items-center justify-between py-4 px-1 border-b border-border last:border-b-0"
+                          >
+                            <div className="space-y-1">
+                              <div className="font-semibold text-foreground text-sm">
+                                {format(entry.date, "MMM dd, yyyy")}
+                              </div>
+                              <div className="text-muted-foreground font-medium text-xs">
+                                {entry.time}
+                              </div>
+                              <div className="text-muted-foreground font-medium text-xs">
+                                {entry.startingPoint} → {entry.endingPoint}
+                              </div>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              type="button"
+                              size="sm"
+                              className="h-8 w-8 p-0 hover:bg-muted rounded-full transition-colors flex-shrink-0"
+                              onClick={() => removeEntry(entry.id)}
+                            >
+                              <X className="h-4 w-4 text-muted-foreground" />
+                            </Button>
+                          </div>
+                        ))
+                      )}
+                    </div>
 
-                <Button
-                  type="button"
-                  className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
-                  onClick={addEntry}
-                  disabled={
-                    !selectedDate ||
-                    !selectedTimeSlot ||
-                    !startingPoint ||
-                    !endingPoint
-                  }
-                >
-                  Add Pet Taxi Trip
-                </Button>
+                    <Button
+                      type="button"
+                      className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
+                      onClick={addEntry}
+                      disabled={
+                        !selectedDate ||
+                        !selectedTimeSlot ||
+                        !startingPoint ||
+                        !endingPoint
+                      }
+                    >
+                      Add Pet Taxi Trip
+                    </Button>
+                  </div>
+                )}
               </div>
+
+              {/* Right Column: Entries - Desktop Only */}
+              {!isMobile && (
+                <div className="w-80 border-l border-border bg-white p-4 space-y-4 h-[400px] overflow-y-auto">
+                  <h4 className="font-semibold text-foreground text-lg">
+                    Pet Taxi Trips
+                  </h4>
+                  <div className="space-y-2 max-h-80 overflow-y-auto">
+                    {entries.length === 0 ? (
+                      <div className="text-center text-muted-foreground text-sm py-8">
+                        No trips scheduled yet
+                      </div>
+                    ) : (
+                      entries.map((entry) => (
+                        <div
+                          key={entry.id}
+                          className="flex items-center justify-between py-4 px-1 border-b border-border last:border-b-0"
+                        >
+                          <div className="space-y-1">
+                            <div className="font-semibold text-foreground text-sm">
+                              {format(entry.date, "MMM dd, yyyy")}
+                            </div>
+                            <div className="text-muted-foreground font-medium text-xs">
+                              {entry.time}
+                            </div>
+                            <div className="text-muted-foreground font-medium text-xs">
+                              {entry.startingPoint} → {entry.endingPoint}
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            type="button"
+                            size="sm"
+                            className="h-8 w-8 p-0 hover:bg-muted rounded-full transition-colors flex-shrink-0"
+                            onClick={() => removeEntry(entry.id)}
+                          >
+                            <X className="h-4 w-4 text-muted-foreground" />
+                          </Button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  <Button
+                    type="button"
+                    className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
+                    onClick={addEntry}
+                    disabled={
+                      !selectedDate ||
+                      !selectedTimeSlot ||
+                      !startingPoint ||
+                      !endingPoint
+                    }
+                  >
+                    Add Pet Taxi Trip
+                  </Button>
+                </div>
+              )}
             </div>
           </Card>
         )}
