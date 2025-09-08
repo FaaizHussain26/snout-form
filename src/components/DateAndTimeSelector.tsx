@@ -8,6 +8,7 @@ import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface DateTimeSelectorProps {
   onEntriesChange: (entries: Array<{ type: string; datetime: string }>) => void;
@@ -39,7 +40,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
   const [duration, setDuration] = useState("30min");
   const [entries, setEntries] = useState<TimeEntry[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
   const [dateRange, setDateRange] = useState<{
     from: Date | undefined;
     to: Date | undefined;
@@ -70,19 +71,6 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640); // sm breakpoint
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-    };
-  }, []);
 
   const addEntry = () => {
     if (dateRange.from && selectedTimeSlot) {

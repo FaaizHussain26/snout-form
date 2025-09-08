@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface PetTaxiSelectorProps {
   onEntriesChange: (entries: Array<{ type: string; datetime: string }>) => void;
@@ -55,7 +56,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
   const [startingPoint, setStartingPoint] = useState("");
   const [endingPoint, setEndingPoint] = useState("");
   const [entries, setEntries] = useState<PetTaxiEntry[]>([]);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
   const [dateRange, setDateRange] = useState<{
     from: Date | undefined;
     to: Date | undefined;
@@ -86,19 +87,6 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640); // sm breakpoint
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-    };
-  }, []);
 
   const addEntry = () => {
     if (dateRange.from && selectedTimeSlot && startingPoint && endingPoint) {
