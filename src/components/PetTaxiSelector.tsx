@@ -223,7 +223,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
             max-h-[80vh] 
             overflow-hidden
             sm:left-[-9px]
-            sm:w-[568px] 
+            sm:w-full 
             sm:max-h-[250px] 
             sm:right-auto
             md:left-[-345px] 

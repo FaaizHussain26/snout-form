@@ -189,7 +189,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
              max-h-[50vh] 
              overflow-hidden
              sm:left-[-9px]
-             sm:w-[568px] 
+             sm:w-full 
              sm:max-h-[350px] 
              sm:right-auto
              md:left-[-345px] 
