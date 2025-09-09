@@ -69,22 +69,28 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      // Check if the click is within the iframe
+      const isWithinIframe = window.self !== window.top;
+      const target = event.target as Node;
+
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        !dropdownRef.current.contains(target) &&
+        (!isWithinIframe || target.ownerDocument === document)
       ) {
         setIsOpen(false);
       }
     };
 
     if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+      // Use capture phase to ensure we catch the event before other handlers
+      document.addEventListener("mousedown", handleClickOutside, true);
     } else {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside, true);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside, true);
     };
   }, [isOpen]);
 
