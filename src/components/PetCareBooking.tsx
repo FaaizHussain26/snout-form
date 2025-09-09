@@ -1,13 +1,6 @@
 "use client";
 
-import type React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { User, Phone, Mail } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
-import { bookingSchema, type BookingFormData } from "@/lib/booking-schema";
 import {
   Form,
   FormControl,
@@ -15,15 +8,24 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { ServiceSelection } from "./ServiceSelection";
-import { PetSelector } from "./PetSelector";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useCreateLead } from "@/hooks/useCreateLead";
+import { bookingSchema, type BookingFormData } from "@/lib/booking-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Mail, Phone, User } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { DateTimeSelector } from "./DateAndTimeSelector";
 import { HouseSittingSelector } from "./HouseSittingSelector";
+import { PetSelector } from "./PetSelector";
 import { PetTaxiSelector } from "./PetTaxiSelector";
-import { useCreateLead } from "@/hooks/useCreateLead";
-import { toast } from "@/hooks/use-toast";
+import { ServiceSelection } from "./ServiceSelection";
 
 export const PetCareBookingForm: React.FC = () => {
+  const [isSuccess, setIsSuccess] = useState(false);
+
   const form = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
@@ -48,16 +50,13 @@ export const PetCareBookingForm: React.FC = () => {
   const selectedService = form.watch("selected_service");
 
   const onSubmit = async (data: BookingFormData) => {
-    try {
-      await mutateAsync(data);
-      toast({
-        description:
-          "Submitted successfully we will get in touch with you shortly",
-      });
-      form.reset();
-    } catch (err) {
-      toast({ description: err?.message || "Failed to submit booking" });
-    }
+    await mutateAsync(data);
+    setIsSuccess(true);
+    form.reset();
+
+    setTimeout(() => {
+      setIsSuccess(false);
+    }, 3000);
   };
 
   return (
@@ -297,10 +296,26 @@ export const PetCareBookingForm: React.FC = () => {
 
             <Button
               type="submit"
-              disabled={isPending}
-              className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
+              disabled={isPending || isSuccess}
+              className={`w-full h-12 font-medium disabled:opacity-50 disabled:cursor-not-allowed ${
+                isSuccess
+                  ? "bg-green-600 hover:bg-green-700 text-white"
+                  : "bg-pet-brown hover:bg-pet-light-brown text-white"
+              }`}
             >
-              Submit
+              {isPending ? (
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>Submitting...</span>
+                </div>
+              ) : isSuccess ? (
+                <div className="flex items-center space-x-2">
+                  <span>✓</span>
+                  <span>Submitted Successfully!</span>
+                </div>
+              ) : (
+                "Submit"
+              )}
             </Button>
           </form>
         </Form>
