@@ -286,7 +286,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
 
                 {/* Time Slot Selection */}
                 <div className="space-y-3 display-flex">
-                  <h4 className="font-medium text-foreground mt-[2.25rem]">
+                  <h4 className="font-medium text-foreground mt-[3.25rem]">
                     Select Time slot
                   </h4>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
