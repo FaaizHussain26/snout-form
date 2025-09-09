@@ -224,13 +224,13 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
             overflow-hidden
             sm:left-[-9px]
             sm:w-[568px] 
-            sm:max-h-[450px] 
+            sm:max-h-[250px] 
             sm:right-auto
             md:left-[-345px] 
             md:w-[680px] 
-            md:max-h-[450px]"
+            md:max-h-[350px]"
           >
-            <div className="flex flex-col sm:flex-row max-h-[45vh] sm:max-h-[450px]">
+            <div className="flex flex-col sm:flex-row max-h-[45vh] sm:max-h-[240px]">
               <div
                 className="flex-1 p-4 space-y-4 overflow-y-auto"
                 style={{

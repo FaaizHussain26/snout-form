@@ -1,7 +1,10 @@
-import type React from "react";
-import { Home, MapPin, Calendar, Car } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
+import DropIns from "@/icons/drop-ins";
+import House from "@/icons/house";
+import Person from "@/icons/person";
+import PetTaxi from "@/icons/pet-taxi";
+import { cn } from "@/lib/utils";
+import type React from "react";
 
 interface ServiceSelectionProps {
   selectedService: string;
@@ -9,10 +12,10 @@ interface ServiceSelectionProps {
 }
 
 const services = [
-  { id: "drop_in", name: "Drops-In", icon: MapPin },
-  { id: "house_sitting", name: "House Sitting", icon: Home },
-  { id: "walks", name: "Walks", icon: Calendar },
-  { id: "pet_taxi", name: "Pet Taxi", icon: Car },
+  { id: "drop_in", name: "Drops-In", icon: DropIns },
+  { id: "house_sitting", name: "House Sitting", icon: House },
+  { id: "walks", name: "Walks", icon: Person },
+  { id: "pet_taxi", name: "Pet Taxi", icon: PetTaxi },
 ];
 
 export const ServiceSelection: React.FC<ServiceSelectionProps> = ({
@@ -33,15 +36,15 @@ export const ServiceSelection: React.FC<ServiceSelectionProps> = ({
             <Card
               key={service.id}
               className={cn(
-                "p-5 cursor-pointer transition-colors border-0 h-28 flex flex-col items-center justify-center ",
+                "p-1 cursor-pointer transition-colors border-0 h-28 flex flex-col items-center justify-center gap-3",
                 isSelected
                   ? "bg-pet-brown text-white"
                   : "bg-pet-card hover:bg-pet-input"
               )}
               onClick={() => onServiceChange(service.id)}
             >
-              <IconComponent className="h-24 w-24 mb-0" />
-              <span className="text-sm font-medium text-center mt-0">
+              <IconComponent color={isSelected ? "white" : "#442F21"} />
+              <span className="text-sm font-medium text-center ">
                 {service.name}
               </span>
             </Card>
