@@ -22,6 +22,7 @@ interface PetTaxiSelectorProps {
 interface PetTaxiEntry {
   id: string;
   date: Date;
+  endDate: Date;
   time: string;
   startingPoint: string;
   endingPoint: string;
@@ -95,10 +96,17 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
   }, [isOpen]);
 
   const addEntry = () => {
-    if (dateRange.from && selectedTimeSlot && startingPoint && endingPoint) {
+    if (
+      dateRange.from &&
+      dateRange.to &&
+      selectedTimeSlot &&
+      startingPoint &&
+      endingPoint
+    ) {
       const newEntry: PetTaxiEntry = {
         id: Date.now().toString(),
         date: dateRange.from,
+        endDate: dateRange.to,
         time: selectedTimeSlot,
         startingPoint,
         endingPoint,
@@ -184,7 +192,17 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
   };
 
   const getDisplayText = () => {
-    if (entries.length === 0) return "Choose pet taxi dates and times";
+    if (entries.length === 0) {
+      if (dateRange.from && dateRange.to) {
+        return `${format(dateRange.from, "MMM dd")} - ${format(
+          dateRange.to,
+          "MMM dd, yyyy"
+        )}`;
+      } else if (dateRange.from) {
+        return format(dateRange.from, "MMM dd, yyyy");
+      }
+      return "Choose pet taxi dates and times";
+    }
     return `${entries.length} pet taxi trip${
       entries.length > 1 ? "s" : ""
     } scheduled`;
@@ -260,7 +278,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                 {/* Calendar */}
                 <div className="space-y-2">
                   <h4 className="font-medium text-foreground">
-                    Select Date Range
+                    Select Date Range (From and To)
                   </h4>
                   <div className="flex justify-center">
                     <Calendar
@@ -278,6 +296,11 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                       className="rounded-md border-0 bg-transparent"
                     />
                   </div>
+                  {dateRange.from && !dateRange.to && (
+                    <p className="text-sm text-amber-600 text-center">
+                      Please select both start and end dates
+                    </p>
+                  )}
                 </div>
 
                 {/* Time Slot Selection */}
@@ -321,7 +344,8 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                           >
                             <div className="space-y-1">
                               <div className="font-semibold text-foreground text-sm">
-                                {format(entry.date, "MMM dd, yyyy")}
+                                {format(entry.date, "MMM dd")} -{" "}
+                                {format(entry.endDate, "MMM dd, yyyy")}
                               </div>
                               <div className="text-muted-foreground font-medium text-xs">
                                 {entry.time}
@@ -350,6 +374,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                       onClick={addEntry}
                       disabled={
                         !dateRange.from ||
+                        !dateRange.to ||
                         !selectedTimeSlot ||
                         !startingPoint ||
                         !endingPoint
@@ -380,7 +405,8 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                         >
                           <div className="space-y-1">
                             <div className="font-semibold text-foreground text-sm">
-                              {format(entry.date, "MMM dd, yyyy")}
+                              {format(entry.date, "MMM dd")} -{" "}
+                              {format(entry.endDate, "MMM dd, yyyy")}
                             </div>
                             <div className="text-muted-foreground font-medium text-xs">
                               {entry.time}
@@ -409,6 +435,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                     onClick={addEntry}
                     disabled={
                       !dateRange.from ||
+                      !dateRange.to ||
                       !selectedTimeSlot ||
                       !startingPoint ||
                       !endingPoint

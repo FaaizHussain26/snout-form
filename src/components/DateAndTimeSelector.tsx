@@ -17,6 +17,7 @@ interface DateTimeSelectorProps {
 interface TimeEntry {
   id: string;
   date: Date;
+  endDate: Date;
   time: string;
   type: string;
 }
@@ -79,10 +80,11 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   }, [isOpen]);
 
   const addEntry = () => {
-    if (dateRange.from && selectedTimeSlot) {
+    if (dateRange.from && dateRange.to && selectedTimeSlot) {
       const newEntry: TimeEntry = {
         id: Date.now().toString(),
         date: dateRange.from,
+        endDate: dateRange.to,
         time: selectedTimeSlot,
         type: duration,
       };
@@ -152,7 +154,17 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   };
 
   const getDisplayText = () => {
-    if (entries.length === 0) return "Choose date and time";
+    if (entries.length === 0) {
+      if (dateRange.from && dateRange.to) {
+        return `${format(dateRange.from, "MMM dd")} - ${format(
+          dateRange.to,
+          "MMM dd, yyyy"
+        )}`;
+      } else if (dateRange.from) {
+        return format(dateRange.from, "MMM dd, yyyy");
+      }
+      return "Choose date and time";
+    }
     return `${entries.length} appointment${
       entries.length > 1 ? "s" : ""
     } scheduled`;
@@ -242,29 +254,39 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                 </div>
 
                 {/* Calendar */}
-                <div className="flex justify-center">
-                  <Calendar
-                    style={{
-                      width: "100%",
-                    }}
-                    mode="range"
-                    selected={dateRange}
-                    onSelect={(range) => {
-                      if (range?.from) {
-                        setDateRange({
-                          from: range.from,
-                          to: range.to,
-                        });
-                        setSelectedDate(range.from);
-                      }
-                    }}
-                    className="rounded-md border-0 bg-transparent"
-                  />
+                <div className="space-y-2">
+                  <h4 className="font-medium text-foreground">
+                    Select Date Range (From and To)
+                  </h4>
+                  <div className="flex justify-center">
+                    <Calendar
+                      style={{
+                        width: "100%",
+                      }}
+                      mode="range"
+                      selected={dateRange}
+                      onSelect={(range) => {
+                        if (range?.from) {
+                          setDateRange({
+                            from: range.from,
+                            to: range.to,
+                          });
+                          setSelectedDate(range.from);
+                        }
+                      }}
+                      className="rounded-md border-0 bg-transparent"
+                    />
+                  </div>
+                  {dateRange.from && !dateRange.to && (
+                    <p className="text-sm text-amber-600 text-center">
+                      Please select both start and end dates
+                    </p>
+                  )}
                 </div>
 
                 {/* Time Slot Selection */}
                 <div className="space-y-3 display-flex">
-                  <h4 className="font-medium text-foreground">
+                  <h4 className="font-medium text-foreground mt-[2.25rem]">
                     Select Time slot
                   </h4>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
@@ -305,7 +327,8 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                           >
                             <div className="space-y-1">
                               <div className="font-semibold text-foreground text-base">
-                                {format(entry.date, "MMMM dd, yyyy")}
+                                {format(entry.date, "MMM dd")} -{" "}
+                                {format(entry.endDate, "MMM dd, yyyy")}
                               </div>
                               <div className="text-muted-foreground font-medium text-sm">
                                 {entry.time} ({entry.type})
@@ -329,7 +352,9 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                       type="button"
                       className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
                       onClick={addEntry}
-                      disabled={!dateRange.from || !selectedTimeSlot}
+                      disabled={
+                        !dateRange.from || !dateRange.to || !selectedTimeSlot
+                      }
                     >
                       Add Entry
                     </Button>
@@ -356,7 +381,8 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                         >
                           <div className="space-y-1">
                             <div className="font-semibold text-foreground text-base">
-                              {format(entry.date, "MMMM dd, yyyy")}
+                              {format(entry.date, "MMM dd")} -{" "}
+                              {format(entry.endDate, "MMM dd, yyyy")}
                             </div>
                             <div className="text-muted-foreground font-medium text-sm">
                               {entry.time} ({entry.type})
@@ -380,7 +406,9 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
                     type="button"
                     className="w-full h-12 bg-pet-brown hover:bg-pet-light-brown text-white font-medium"
                     onClick={addEntry}
-                    disabled={!dateRange.from || !selectedTimeSlot}
+                    disabled={
+                      !dateRange.from || !dateRange.to || !selectedTimeSlot
+                    }
                   >
                     Add Entry
                   </Button>
