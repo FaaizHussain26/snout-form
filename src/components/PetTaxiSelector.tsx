@@ -305,7 +305,9 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
 
                 {/* Time Slot Selection */}
                 <div className="space-y-3">
-                  <h4 className="font-medium text-foreground">Select Time</h4>
+                  <h4 className="font-medium text-foreground mt-[2.25rem]">
+                    Select Time
+                  </h4>
                   <div className="space-y-1 max-h-60 overflow-y-auto">
                     {timeSlots.map((time) => (
                       <Button

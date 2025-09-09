@@ -226,7 +226,7 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="font-medium text-foreground">
+                  <h4 className="font-medium text-foreground mt-[2.25rem]">
                     Start Time (First Day)
                   </h4>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
@@ -249,7 +249,7 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({
                 </div>
 
                 <div className="space-y-3">
-                  <h4 className="font-medium text-foreground">
+                  <h4 className="font-medium text-foreground mt-[2.25rem]">
                     End Time (Last Day)
                   </h4>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
