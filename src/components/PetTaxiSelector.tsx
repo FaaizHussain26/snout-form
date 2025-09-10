@@ -394,7 +394,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                   <h4 className="font-semibold text-foreground text-lg">
                     Pet Taxi Trips
                   </h4>
-                  <div className="space-y-2 max-h-80 overflow-y-auto">
+                  <div className="space-y-2 max-h-80">
                     {entries.length === 0 ? (
                       <div className="text-center text-muted-foreground text-sm py-8">
                         No trips scheduled yet

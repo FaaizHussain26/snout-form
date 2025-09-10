@@ -364,11 +364,11 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
 
               {/* Right Column: Entries - Desktop Only */}
               {!isMobile && (
-                <div className="w-80 border-l border-border bg-white p-4 space-y-4 h-[400px] overflow-y-auto">
+                <div className="w-80 border-l border-border bg-white p-4 space-y-4 overflow-y-auto">
                   <h4 className="font-semibold text-foreground text-lg">
                     Entries
                   </h4>
-                  <div className="space-y-2 max-h-80 overflow-y-auto">
+                  <div className="space-y-2 max-h-80">
                     {entries.length === 0 ? (
                       <div className="text-center text-muted-foreground text-sm py-8">
                         No entries yet
