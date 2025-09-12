@@ -151,7 +151,7 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({
   };
 
   const getDisplayText = () => {
-    if (entries.length === 0) return "Choose house sitting dates and times";
+    if (entries.length === 0) return "Choose dates and times";
     return `${entries.length} house sitting period${
       entries.length > 1 ? "s" : ""
     } scheduled`;
@@ -161,9 +161,6 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({
     <div className="space-y-2" ref={dropdownRef}>
       <div>
         <h3 className="font-medium text-foreground">House Sitting Period</h3>
-        <p className="text-sm text-muted-foreground">
-          Select first day, last day, and times
-        </p>
       </div>
 
       <div className="relative max-h-[500px]">

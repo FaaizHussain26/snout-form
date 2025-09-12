@@ -145,7 +145,6 @@ export const PetSelector: React.FC<PetSelectorProps> = ({
     <div className="space-y-2" ref={dropdownRef}>
       <div>
         <h3 className="font-medium text-foreground">Pet Information</h3>
-        <p className="text-sm text-muted-foreground">Pet Selection</p>
       </div>
 
       <div className="relative">

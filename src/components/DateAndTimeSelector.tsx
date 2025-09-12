@@ -174,7 +174,6 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
     <div className="space-y-2" ref={dropdownRef}>
       <div>
         <h3 className="font-medium text-foreground">For What Date and Time?</h3>
-        <p className="text-sm text-muted-foreground">Date and Time</p>
       </div>
 
       <div className="relative max-h-[500px]">
