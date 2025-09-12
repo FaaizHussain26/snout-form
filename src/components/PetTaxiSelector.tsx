@@ -211,10 +211,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
   return (
     <div className="space-y-2" ref={dropdownRef}>
       <div>
-        <h3 className="font-medium text-foreground">Pet Taxi Service</h3>
-        <p className="text-sm text-muted-foreground">
-          Select date, time, and addresses
-        </p>
+        <h3 className="font-medium text-foreground">Pet Taxi Service</h3>      
       </div>
 
       <div className="relative max-h-[500px]">
