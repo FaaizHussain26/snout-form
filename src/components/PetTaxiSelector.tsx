@@ -201,7 +201,6 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({ onEntriesChang
               {/* Selected Dates Pills */}
               {selectedDates.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="font-medium text-foreground text-sm">Selected Dates</h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedDates.map((date) => (
                       <div

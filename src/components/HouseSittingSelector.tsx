@@ -201,7 +201,6 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({ onEn
 
               {selectedDates.length > 0 && (
                 <div className="space-y-2">
-                  <h4 className="font-medium text-foreground">Selected Dates</h4>
                   <div className="flex flex-wrap gap-2">
                     {selectedDates.map((date) => (
                       <div
