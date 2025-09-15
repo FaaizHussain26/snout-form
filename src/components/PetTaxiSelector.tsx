@@ -176,7 +176,10 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({ onEntriesChang
                    max-h-[60vh] 
                    overflow-y-auto
                    ">
-            <div className="p-4 space-y-4">
+            <div className="p-4 space-y-4 overflow-y-auto" style={{
+                  maxHeight: "30vh",
+                  overflowY: "auto",
+                }}>
               {/* Calendar */}
               <div className="space-y-2">
                 <h4 className="font-medium text-foreground">Select Dates</h4>
@@ -219,27 +222,27 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({ onEntriesChang
                 </div>
               )}
 
-              {/* Time Slot Selection */}
-              <div className="space-y-3 mt-5">
-                <h4 className="font-medium text-foreground" style={{ marginTop: "40px" }}>Select Time</h4>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-40 overflow-y-auto">
-                  {timeSlots.map((time) => (
-                    <Button
-                      key={time}
-                      variant="ghost"
-                      className={cn(
-                        "justify-center text-center h-10 transition-all duration-200 font-medium border",
-                        selectedTimeSlot === time
-                          ? "bg-pet-brown hover:bg-pet-light-brown text-white border-pet-brown"
-                          : "bg-pet-card hover:bg-pet-brown hover:text-white border-pet-card hover:border-pet-brown",
-                      )}
-                      onClick={() => setSelectedTimeSlot(time)}
-                    >
-                      {time}
-                    </Button>
-                  ))}
-                </div>
-              </div>
+                     <div className="space-y-3 mt-5">
+                       <h4 className="font-medium text-foreground" style={{ marginTop: "40px" }}>Select Time</h4>
+                       <div className="grid grid-cols-2 gap-2">
+                         {timeSlots.map((time) => (
+                           <Button
+                             key={time}
+                             variant="ghost"
+                             className={cn(
+                               "justify-center text-center h-10 transition-all duration-200 font-medium border",
+                               selectedTimeSlot === time
+                                 ? "bg-primary text-primary-foreground border-primary"
+                                 : "bg-card hover:bg-primary hover:text-primary-foreground border-border hover:border-primary",
+                             )}
+                             onClick={() => setSelectedTimeSlot(time)}
+                           >
+                             {time}
+                           </Button>
+                         ))}
+                       </div>
+                     </div>
+       
 
               {/* Add Button */}
               <Button
