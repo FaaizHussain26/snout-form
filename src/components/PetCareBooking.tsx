@@ -112,16 +112,6 @@ export const PetCareBookingForm: React.FC = () => {
                       ) : selectedService === "pet_taxi" ? (
                         <PetTaxiSelector
                           onEntriesChange={field.onChange}
-                          onAddressesChange={(addresses) => {
-                            form.setValue(
-                              "starting_point",
-                              addresses.starting_point
-                            );
-                            form.setValue(
-                              "ending_point",
-                              addresses.ending_point
-                            );
-                          }}
                         />
                       ) : (
                         <DateTimeSelector onEntriesChange={field.onChange} />
@@ -133,7 +123,7 @@ export const PetCareBookingForm: React.FC = () => {
               />
             </div>
 
-            {selectedService !== "pet_taxi" && (
+            {selectedService !== "pet_taxi"  && (
               <div className="p-2 bg-[#FFE6F4]">
                 <FormField
                   control={form.control}
@@ -156,6 +146,57 @@ export const PetCareBookingForm: React.FC = () => {
                 />
               </div>
             )}
+
+
+            {selectedService === "pet_taxi"  && (
+              <div className="p-2 bg-[#FFE6F4]">
+                <FormField
+                  control={form.control}
+                  name="starting_point"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="space-y-2">
+                        <h3 className="font-medium text-foreground">Starting Point</h3>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter your Starting Point"
+                            {...field}
+                            className="bg-pet-input border-0 h-12"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+
+
+           {selectedService === "pet_taxi"  && (
+              <div className="p-2 bg-[#FFE6F4]">
+                <FormField
+                  control={form.control}
+                  name="ending_point"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="space-y-2">
+                        <h3 className="font-medium text-foreground">Ending Point</h3>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter your Ending Point"
+                            {...field}
+                            className="bg-pet-input border-0 h-12"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+
 
             {selectedService === "house_sitting" && (
               <div className="grid md:grid-cols-2 gap-3">

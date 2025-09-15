@@ -8,15 +8,10 @@ import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface PetTaxiSelectorProps {
   onEntriesChange: (entries: Array<{ type: string; datetime: string }>) => void;
-  onAddressesChange: (addresses: {
-    starting_point: string;
-    ending_point: string;
-  }) => void;
 }
 
 interface PetTaxiEntry {
@@ -24,8 +19,6 @@ interface PetTaxiEntry {
   date: Date;
   endDate: Date;
   time: string;
-  startingPoint: string;
-  endingPoint: string;
 }
 
 const timeSlots = [
@@ -50,12 +43,9 @@ const timeSlots = [
 
 export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
   onEntriesChange,
-  onAddressesChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
-  const [startingPoint, setStartingPoint] = useState("");
-  const [endingPoint, setEndingPoint] = useState("");
   const [entries, setEntries] = useState<PetTaxiEntry[]>([]);
   const isMobile = useIsMobile();
   const [dateRange, setDateRange] = useState<{
@@ -99,17 +89,13 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
     if (
       dateRange.from &&
       dateRange.to &&
-      selectedTimeSlot &&
-      startingPoint &&
-      endingPoint
+      selectedTimeSlot
     ) {
       const newEntry: PetTaxiEntry = {
         id: Date.now().toString(),
         date: dateRange.from,
         endDate: dateRange.to,
         time: selectedTimeSlot,
-        startingPoint,
-        endingPoint,
       };
       const updatedEntries = [...entries, newEntry];
       setEntries(updatedEntries);
@@ -147,10 +133,6 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
       });
 
       onEntriesChange(formattedEntries);
-      onAddressesChange({
-        starting_point: startingPoint,
-        ending_point: endingPoint,
-      });
     }
   };
 
@@ -178,17 +160,6 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
     });
 
     onEntriesChange(formattedEntries);
-
-    // Update addresses if there are still entries
-    if (updatedEntries.length > 0) {
-      const latestEntry = updatedEntries[updatedEntries.length - 1];
-      onAddressesChange({
-        starting_point: latestEntry.startingPoint,
-        ending_point: latestEntry.endingPoint,
-      });
-    } else {
-      onAddressesChange({ starting_point: "", ending_point: "" });
-    }
   };
 
   const getDisplayText = () => {
@@ -253,25 +224,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                   overflowY: "auto",
                 }}
               >
-                {/* Address Fields */}
-                <div className="space-y-3">
-                  <h4 className="font-medium text-foreground">Addresses</h4>
-                  <div className="space-y-2">
-                    <Input
-                      placeholder="Starting address"
-                      value={startingPoint}
-                      onChange={(e) => setStartingPoint(e.target.value)}
-                      className="bg-pet-input border-0 h-10"
-                    />
-                    <Input
-                      placeholder="Ending address"
-                      value={endingPoint}
-                      onChange={(e) => setEndingPoint(e.target.value)}
-                      className="bg-pet-input border-0 h-10"
-                    />
-                  </div>
-                </div>
-
+              
                 {/* Calendar */}
                 <div className="space-y-2">
                   <h4 className="font-medium text-foreground">
@@ -349,9 +302,6 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                               <div className="text-muted-foreground font-medium text-xs">
                                 {entry.time}
                               </div>
-                              <div className="text-muted-foreground font-medium text-xs">
-                                {entry.startingPoint} → {entry.endingPoint}
-                              </div>
                             </div>
                             <Button
                               variant="ghost"
@@ -374,9 +324,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                       disabled={
                         !dateRange.from ||
                         !dateRange.to ||
-                        !selectedTimeSlot ||
-                        !startingPoint ||
-                        !endingPoint
+                        !selectedTimeSlot
                       }
                     >
                       Add Pet Taxi Trip
@@ -410,9 +358,6 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                             <div className="text-muted-foreground font-medium text-xs">
                               {entry.time}
                             </div>
-                            <div className="text-muted-foreground font-medium text-xs">
-                              {entry.startingPoint} → {entry.endingPoint}
-                            </div>
                           </div>
                           <Button
                             variant="ghost"
@@ -435,9 +380,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({
                     disabled={
                       !dateRange.from ||
                       !dateRange.to ||
-                      !selectedTimeSlot ||
-                      !startingPoint ||
-                      !endingPoint
+                      !selectedTimeSlot 
                     }
                   >
                     Add Pet Taxi Trip
