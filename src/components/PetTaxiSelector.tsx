@@ -171,15 +171,11 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({ onEntriesChang
         </Card>
 
         {isOpen && (
-          <Card
-            className={cn(
-              "absolute top-full left-0 right-0 z-50 mt-1",
-              "bg-pet-card border-0 shadow-lg overflow-y-auto",
-              "max-h-[60vh] sm:max-h-[80vh]",
-              "sm:left-[-9px] sm:w-full sm:right-auto",
-              "md:left-[-345px] md:w-[680px]",
-            )}
-          >
+         <Card className="absolute top-full left-0 right-0 z-50 mt-1 
+                   bg-card border shadow-lg
+                   max-h-[60vh] 
+                   overflow-y-auto
+                   ">
             <div className="p-4 space-y-4">
               {/* Calendar */}
               <div className="space-y-2">
