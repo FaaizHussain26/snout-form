@@ -224,7 +224,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
 
               {/* Time Slot Selection */}
               <div className="space-y-3 mt-5">
-                <h4 className="font-medium text-foreground">Select Time</h4>
+                <h4 className="font-medium text-foreground" style={{ marginTop: "40px" }}>Select Time</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {timeSlots.map((time) => (
                     <Button
