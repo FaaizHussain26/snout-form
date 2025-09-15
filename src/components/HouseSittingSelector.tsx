@@ -224,7 +224,7 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({ onEn
               )}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-3">
+                <div className="space-y-3 mt-5">
                   <h4 className="font-medium text-foreground">Start Time</h4>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
                     {timeSlots.map((time) => (
@@ -245,7 +245,7 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({ onEn
                   </div>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3 mt-5">
                   <h4 className="font-medium text-foreground">End Time</h4>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
                     {timeSlots.map((time) => (

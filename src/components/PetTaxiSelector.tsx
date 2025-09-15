@@ -220,7 +220,7 @@ export const PetTaxiSelector: React.FC<PetTaxiSelectorProps> = ({ onEntriesChang
               )}
 
               {/* Time Slot Selection */}
-              <div className="space-y-3">
+              <div className="space-y-3 mt-5">
                 <h4 className="font-medium text-foreground">Select Time</h4>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-40 overflow-y-auto">
                   {timeSlots.map((time) => (
