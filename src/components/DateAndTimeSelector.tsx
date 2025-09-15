@@ -153,17 +153,13 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
         {isOpen && (
           <Card className="absolute top-full left-0 right-0 z-50 mt-1 
           bg-card border shadow-lg
-          max-h-[80vh] 
-          md:max-h-[60vh] 
+          max-h-[60vh] 
           overflow-y-auto
-          xs:max-h-[230px] 
-          sm:max-h-[320px] 
-          md:max-h-[400px]
           ">
               <div
                 className="flex-1 p-4 space-y-4 overflow-y-auto"
                 style={{
-                  maxHeight: "45vh",
+                  maxHeight: "30vh",
                   overflowY: "auto",
                 }}
               >
@@ -194,6 +190,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
                 <div className="flex justify-center">
                   <Calendar
                     mode="multiple"
+                    style={{ width: "100%" }}
                     selected={selectedDates}
                     onSelect={handleDateSelect}
                     className="rounded-md border-0 bg-transparent"
