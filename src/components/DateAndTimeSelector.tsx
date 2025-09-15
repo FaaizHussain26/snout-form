@@ -156,7 +156,7 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
           max-h-[80vh] 
           md:max-h-[60vh] 
           overflow-y-auto
-          sm:max-h-[400px] 
+          sm:max-h-[250px] 
           md:max-h-[400px]
           ">
               <div
