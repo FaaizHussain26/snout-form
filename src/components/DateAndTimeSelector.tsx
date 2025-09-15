@@ -151,8 +151,21 @@ export const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({ onEntriesCha
         </Card>
 
         {isOpen && (
-          <Card className="absolute top-full left-0 right-0 z-50 mt-1 bg-card border shadow-lg max-h-[40vh] overflow-y-auto">
-            <div className="p-4 space-y-6">
+          <Card className="absolute top-full left-0 right-0 z-50 mt-1 
+          bg-card border shadow-lg
+          max-h-[80vh] 
+          md:max-h-[60vh] 
+          overflow-y-auto
+          sm:max-h-[450px] 
+          md:max-h-[450px]
+          ">
+              <div
+                className="flex-1 p-4 space-y-4 overflow-y-auto"
+                style={{
+                  maxHeight: "45vh",
+                  overflowY: "auto",
+                }}
+              >
               {/* Duration Selection */}
               <div className="flex justify-between items-center">
                 <h4 className="font-medium text-foreground">Duration</h4>
