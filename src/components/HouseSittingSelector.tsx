@@ -188,7 +188,7 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({
              overflow-hidden
              sm:left-[-9px]
              sm:w-full 
-             sm:max-h-[450px] 
+             sm:max-h-[350px] 
              sm:right-auto
              md:left-[-345px] 
              md:w-[680px] 
