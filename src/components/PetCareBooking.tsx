@@ -1,30 +1,24 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useCreateLead } from "@/hooks/useCreateLead";
-import { bookingSchema, type BookingFormData } from "@/lib/booking-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Phone, User } from "lucide-react";
-import type React from "react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { DateTimeSelector } from "./DateAndTimeSelector";
-import { HouseSittingSelector } from "./HouseSittingSelector";
-import { PetSelector } from "./PetSelector";
-import { PetTaxiSelector } from "./PetTaxiSelector";
-import { ServiceSelection } from "./ServiceSelection";
+import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { useCreateLead } from "@/hooks/useCreateLead"
+import { bookingSchema, type BookingFormData } from "@/lib/booking-schema"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Mail, Phone, User } from "lucide-react"
+import type React from "react"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { DateTimeSelector } from "./DateAndTimeSelector"
+import { HouseSittingSelector } from "./HouseSittingSelector"
+import { PetSelector } from "./PetSelector"
+import { PetTaxiSelector } from "./PetTaxiSelector"
+import { ServiceSelection } from "./ServiceSelection"
 
 export const PetCareBookingForm: React.FC = () => {
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false)
 
   const form = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
@@ -44,20 +38,20 @@ export const PetCareBookingForm: React.FC = () => {
       },
       specific_note: "",
     },
-  });
+  })
 
-  const { mutateAsync, isPending } = useCreateLead();
-  const selectedService = form.watch("selected_service");
+  const { mutateAsync, isPending } = useCreateLead()
+  const selectedService = form.watch("selected_service")
 
   const onSubmit = async (data: BookingFormData) => {
-    await mutateAsync(data);
-    setIsSuccess(true);
-    form.reset();
+    await mutateAsync(data)
+    setIsSuccess(true)
+    form.reset()
 
     setTimeout(() => {
-      setIsSuccess(false);
-    }, 3000);
-  };
+      setIsSuccess(false)
+    }, 3000)
+  }
 
   return (
     <div className="bg-[#fce1ef] p-2 md:p-6 overflow-hidden">
@@ -71,10 +65,7 @@ export const PetCareBookingForm: React.FC = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <ServiceSelection
-                        selectedService={field.value}
-                        onServiceChange={field.onChange}
-                      />
+                      <ServiceSelection selectedService={field.value} onServiceChange={field.onChange} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -89,10 +80,7 @@ export const PetCareBookingForm: React.FC = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <PetSelector
-                        selectedPets={field.value}
-                        onPetsChange={field.onChange}
-                      />
+                      <PetSelector selectedPets={field.value} onPetsChange={field.onChange} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -106,13 +94,9 @@ export const PetCareBookingForm: React.FC = () => {
                   <FormItem>
                     <FormControl>
                       {selectedService === "house_sitting" ? (
-                        <HouseSittingSelector
-                          onEntriesChange={field.onChange}
-                        />
+                        <HouseSittingSelector onEntriesChange={field.onChange} />
                       ) : selectedService === "pet_taxi" ? (
-                        <PetTaxiSelector
-                          onEntriesChange={field.onChange}
-                        />
+                        <PetTaxiSelector onEntriesChange={field.onChange} />
                       ) : (
                         <DateTimeSelector onEntriesChange={field.onChange} />
                       )}
@@ -123,7 +107,7 @@ export const PetCareBookingForm: React.FC = () => {
               />
             </div>
 
-            {selectedService !== "pet_taxi"  && (
+            {selectedService !== "pet_taxi" && (
               <div className="p-2 bg-[#FFE6F4]">
                 <FormField
                   control={form.control}
@@ -133,11 +117,7 @@ export const PetCareBookingForm: React.FC = () => {
                       <div className="space-y-2">
                         <h3 className="font-medium text-foreground">Address</h3>
                         <FormControl>
-                          <Input
-                            placeholder="Enter your Address"
-                            {...field}
-                            className="bg-pet-input border-0 h-12"
-                          />
+                          <Input placeholder="Enter your Address" {...field} className="bg-pet-input border-0 h-12" />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -147,8 +127,7 @@ export const PetCareBookingForm: React.FC = () => {
               </div>
             )}
 
-
-            {selectedService === "pet_taxi"  && (
+            {selectedService === "pet_taxi" && (
               <div className="p-2 bg-[#FFE6F4]">
                 <FormField
                   control={form.control}
@@ -172,8 +151,7 @@ export const PetCareBookingForm: React.FC = () => {
               </div>
             )}
 
-
-           {selectedService === "pet_taxi"  && (
+            {selectedService === "pet_taxi" && (
               <div className="p-2 bg-[#FFE6F4]">
                 <FormField
                   control={form.control}
@@ -197,7 +175,6 @@ export const PetCareBookingForm: React.FC = () => {
               </div>
             )}
 
-
             {selectedService === "house_sitting" && (
               <div className="grid md:grid-cols-2 gap-3">
                 <FormField
@@ -206,15 +183,9 @@ export const PetCareBookingForm: React.FC = () => {
                   render={({ field }) => (
                     <FormItem>
                       <div className="space-y-2">
-                        <h3 className="font-medium text-foreground">
-                          Start Time (First Day)
-                        </h3>
+                        <h3 className="font-medium text-foreground">Start Time (First Day)</h3>
                         <FormControl>
-                          <Input
-                            placeholder="e.g., 9:00 AM"
-                            {...field}
-                            className="bg-pet-input border-0 h-12"
-                          />
+                          <Input placeholder="e.g., 9:00 AM" {...field} className="bg-pet-input border-0 h-12" />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -227,15 +198,9 @@ export const PetCareBookingForm: React.FC = () => {
                   render={({ field }) => (
                     <FormItem>
                       <div className="space-y-2">
-                        <h3 className="font-medium text-foreground">
-                          End Time (Last Day)
-                        </h3>
+                        <h3 className="font-medium text-foreground">End Time (Last Day)</h3>
                         <FormControl>
-                          <Input
-                            placeholder="e.g., 6:00 PM"
-                            {...field}
-                            className="bg-pet-input border-0 h-12"
-                          />
+                          <Input placeholder="e.g., 6:00 PM" {...field} className="bg-pet-input border-0 h-12" />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -246,9 +211,7 @@ export const PetCareBookingForm: React.FC = () => {
             )}
 
             <div className="space-y-2 p-2 bg-[#FFE6F4]">
-              <h3 className="font-medium text-foreground mb-0">
-                Contact Details
-              </h3>
+              <h3 className="font-medium text-foreground mb-0">Contact Details</h3>
               <div className="grid md:grid-cols-3 gap-3 mt-0">
                 <FormField
                   control={form.control}
@@ -258,11 +221,7 @@ export const PetCareBookingForm: React.FC = () => {
                       <div className="relative">
                         <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                         <FormControl>
-                          <Input
-                            placeholder="Name"
-                            {...field}
-                            className="bg-pet-input border-0 h-12 pl-10"
-                          />
+                          <Input placeholder="Name" {...field} className="bg-pet-input border-0 h-12 pl-10" />
                         </FormControl>
                       </div>
                       <FormMessage />
@@ -277,11 +236,7 @@ export const PetCareBookingForm: React.FC = () => {
                       <div className="relative">
                         <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                         <FormControl>
-                          <Input
-                            placeholder="Phone"
-                            {...field}
-                            className="bg-pet-input border-0 h-12 pl-10"
-                          />
+                          <Input placeholder="Phone" {...field} className="bg-pet-input border-0 h-12 pl-10" />
                         </FormControl>
                       </div>
                       <FormMessage />
@@ -318,9 +273,7 @@ export const PetCareBookingForm: React.FC = () => {
                 render={({ field }) => (
                   <FormItem>
                     <div className="space-y-2">
-                      <h3 className="font-medium text-foreground">
-                        Specific Note
-                      </h3>
+                      <h3 className="font-medium text-foreground">Specific Note</h3>
                       <FormControl>
                         <Textarea
                           placeholder="Enter specification"
@@ -362,5 +315,5 @@ export const PetCareBookingForm: React.FC = () => {
         </Form>
       </div>
     </div>
-  );
-};
+  )
+}

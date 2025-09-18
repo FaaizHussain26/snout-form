@@ -1,7 +1,9 @@
-import { PetCareBookingForm } from "@/components/PetCareBooking";
+import { MultiStepBookingForm } from "@/components/MultiStepBookingForm";
 
 const Index = () => {
-  return <PetCareBookingForm />;
+  return   <main>
+  <MultiStepBookingForm />
+</main>;
 };
 
 export default Index;

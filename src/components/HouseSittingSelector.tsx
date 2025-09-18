@@ -174,18 +174,20 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({ onEn
         </Card>
 
         {isOpen && (
-         <Card className="absolute top-full left-0 right-0 z-50 mt-1 
+          <Card
+            className="absolute top-full left-0 right-0 z-50 mt-1 
                  bg-card border shadow-lg
                  max-h-[60vh] 
                  overflow-y-auto
-                 ">
-                     <div
-                       className="flex-1 p-4 space-y-4 overflow-y-auto"
-                       style={{
-                         maxHeight: "30vh",
-                         overflowY: "auto",
-                       }}
-                     >
+                 "
+          >
+            <div
+              className="flex-1 p-4 space-y-4 overflow-y-auto"
+              style={{
+                maxHeight: "30vh",
+                overflowY: "auto",
+              }}
+            >
               <div className="space-y-3">
                 <h4 className="font-medium text-foreground">Select Dates</h4>
                 <div className="flex justify-center">
@@ -224,7 +226,9 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({ onEn
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-3 mt-5">
-                  <h4 className="font-medium text-foreground" style={{ marginTop: "40px" }}>Start Time</h4>
+                  <h4 className="font-medium text-foreground" style={{ marginTop: "40px" }}>
+                    Start Time
+                  </h4>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
                     {timeSlots.map((time) => (
                       <Button
@@ -245,7 +249,9 @@ export const HouseSittingSelector: React.FC<HouseSittingSelectorProps> = ({ onEn
                 </div>
 
                 <div className="space-y-3 mt-5">
-                  <h4 className="font-medium text-foreground" style={{ marginTop: "40px" }}>End Time</h4>
+                  <h4 className="font-medium text-foreground" style={{ marginTop: "40px" }}>
+                    End Time
+                  </h4>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
                     {timeSlots.map((time) => (
                       <Button
